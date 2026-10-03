@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .comparison-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .player-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            width: 280px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .player-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .vs-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .compare-again {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .compare-again:hover {
+            background: #0056b3;
+        }
+
+        .chart-container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a> |
+            <a href="{{ url_for('compare') }}">Compare</a> |
+            <a href="{{ url_for('about') }}">About</a>
+        </nav>
+    </header>
+
+    <h1>Comparison Results</h1>
+
+    <div class="comparison-container">
+        <!-- Player 1 -->
+        <div class="player-card">
+            <img src="{{ url_for('static', filename=player1['image_url'].replace('static/', '')) }}" 
+     alt="{{ player1['name'] }}" class="player-image">
+            <h2>{{ player1['name'] }}</h2>
+            <p><strong>Age:</strong> {{ player1['age'] }}</p>
+            <p><strong>Position:</strong> {{ player1['position'] }}</p>
+            <p><strong>Club:</strong> {{ player1['club'] }}</p>
+        </div>
+
+        <div class="vs-text">VS</div>
+
+        <!-- Player 2 -->
+        <div class="player-card">
+            <img src="{{ url_for('static', filename='images/' + player2['image_url'].split('/')[-1]) }}" alt="{{ player2['name'] }}" class="player-image">
+            <h2>{{ player2['name'] }}</h2>
+            <p><strong>Age:</strong> {{ player2['age'] }}</p>
+            <p><strong>Position:</strong> {{ player2['position'] }}</p>
+            <p><strong>Club:</strong> {{ player2['club'] }}</p>
+        </div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Stats</th>
+            <th>{{ player1.name }}</th>
+            <th>{{ player2.name }}</th>
+        </tr>
+        <tr>
+            <td>Goals</td>
+            <td>{{ player1.goals }}</td>
+            <td>{{ player2.goals }}</td>
+        </tr>
+        <tr>
+            <td>Assists</td>
+            <td>{{ player1.assists }}</td>
+            <td>{{ player2.assists }}</td>
+        </tr>
+        <tr>
+            <td>Shots on Target</td>
+            <td>{{ player1.shots_on_target }}</td>
+            <td>{{ player2.shots_on_target }}</td>
+        </tr>
+        <tr>
+            <td>Total Passes Per Game</td>
+            <td>{{ player1.total_passes_per_game }}</td>
+            <td>{{ player2.total_passes_per_game }}</td>
+        </tr>
+        <tr>
+            <td>Tackles Won</td>
+            <td>{{ player1.tackles_won }}</td>
+            <td>{{ player2.tackles_won }}</td>
+        </tr>
+        <tr>
+            <td>Distance Covered</td>
+            <td>{{ player1.distance_covered }} km</td>
+            <td>{{ player2.distance_covered }} km</td>
+        </tr>
+        <tr>
+            <td>Clean Sheets</td>
+            <td>{{ player1.clean_sheets }}</td>
+            <td>{{ player2.clean_sheets }}</td>
+        </tr>
+    </table>
+
+    <div class="chart-container">
+        <canvas id="playerComparisonChart"></canvas>
+    </div>
+
+    <a href="{{ url_for('compare') }}" class="compare-again">Compare Again</a>
+
+    <script>
+        const ctx = document.getElementById('playerComparisonChart').getContext('2d');
+        const playerComparisonChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Goals', 'Assists', 'Shots on Target', 'Passes Per Game', 'Tackles Won', 'Distance Covered', 'Clean Sheets'],
+                datasets: [
+                    {
+                        label: '{{ player1["name"] }}',
+                        data: [
+                            {{ player1["goals"] }},
+                            {{ player1["assists"] }},
+                            {{ player1["shots_on_target"] }},
+                            {{ player1["total_passes_per_game"] }},
+                            {{ player1["tackles_won"] }},
+                            {{ player1["distance_covered"] }},
+                            {{ player1["clean_sheets"] }}
+                        ],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                    },
+                    {
+                        label: '{{ player2["name"] }}',
+                        data: [
+                            {{ player2["goals"] }},
+                            {{ player2["assists"] }},
+                            {{ player2["shots_on_target"] }},
+                            {{ player2["total_passes_per_game"] }},
+                            {{ player2["tackles_won"] }},
+                            {{ player2["distance_covered"] }},
+                            {{ player2["clean_sheets"] }}
+                        ],
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ player['name'] }} - Player Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .player-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 40%;
+        }
+
+        .player-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .chart-container {
+            width: 50%;
+            height: 300px;
+        }
+
+        .back-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            width: 200px;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a> |
+            <a href="{{ url_for('compare') }}">Compare</a> |
+            <a href="{{ url_for('about') }}">About</a>
+        </nav>
+    </header>
+
+    <h1>Player Profile</h1>
+
+    <div class="container">
+        <div class="player-card">
+            <img src="{{ url_for('static', filename='images/' + player['image_url'].split('/')[-1]) }}" alt="{{ player['name'] }}" class="player-image">
+            <h1>{{ player['name'] }}</h1>
+            <p><strong>Age:</strong> {{ player['age'] }}</p>
+            <p><strong>Position:</strong> {{ player['position'] }}</p>
+            <p><strong>Club:</strong> {{ player['club'] }}</p>
+            <p><strong>Nationality:</strong> {{ player['nationality'] }}</p>
+            <p><strong>Appearances:</strong> {{ player['appearances'] }}</p>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="playerStatsChart"></canvas>
+        </div>
+    </div>
+
+    <a href="/" class="back-button">Back to Home</a>
+
+    <script>
+        const ctx = document.getElementById('playerStatsChart').getContext('2d');
+        const playerStatsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Goals', 'Assists', 'Shots on Target', 'Passes per Game', 'Tackles Won', 'Distance Covered'],
+                datasets: [{
+                    label: 'Performance Metrics',
+                    data: [
+                        {{ player['goals'] }},
+                        {{ player['assists'] }},
+                        {{ player['shots_on_target'] }},
+                        {{ player['total_passes_per_game'] }},
+                        {{ player['tackles_won'] }},
+                        {{ player['distance_covered'] }}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

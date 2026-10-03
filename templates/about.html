@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Football Player Performance Metrics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('compare') }}">Compare</a>
+            <a href="{{ url_for('about') }}" class="active">About</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>About the Project</h1>
+        <p>Player Performance Metrics is a platform that allows users to analyze and compare player statistics with interactive visuals.</p>
+    </section>
+
+    <section class="content">
+        <div class="card">
+            <h2>Objective</h2>
+            <p>To provide an intuitive interface for football analysts and fans to track player performance using structured data and visualizations.</p>
+        </div>
+
+        <div class="card">
+            <h2>Key Features</h2>
+            <ul>
+                <p>Search and view player profiles.</p>
+                <p>Compare players with performance charts.</p>
+                <p>Graphical representation of key stats.</p>
+                <p>Real-time updates of player statistics.</p>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Technologies Used</h2>
+            <p>Built with Flask, SQLite, HTML, CSS, JavaScript, and Chart.js for visualization.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Player Performance Metrics</p>
+    </footer>
+
+</body>
+</html>

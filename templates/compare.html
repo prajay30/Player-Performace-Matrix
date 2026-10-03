@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Players to Compare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a> |
+            <a href="{{ url_for('compare') }}">Compare</a> |
+            <a href="{{ url_for('about') }}">About</a>
+        </nav>
+    </header>
+
+    <h1>Select Players to Compare</h1>
+
+    <form id="compareForm" method="get">
+        <label for="player1">Select Player 1:</label>
+        <select name="player1_id" id="player1" required>
+            {% for player in players %}
+                <option value="{{ player['id'] }}">{{ player['name'] }} - {{ player['club'] }}</option>
+            {% endfor %}
+        </select>
+    
+        <label for="player2">Select Player 2:</label>
+        <select name="player2_id" id="player2" required>
+            {% for player in players %}
+                <option value="{{ player['id'] }}">{{ player['name'] }} - {{ player['club'] }}</option>
+            {% endfor %}
+        </select>
+    
+        <button type="submit">Compare</button>
+    </form>
+    
+    <script>
+        document.getElementById("compareForm").addEventListener("submit", function(event) {
+            event.preventDefault();  // Prevent default form submission
+    
+            let player1 = document.getElementById("player1").value;
+            let player2 = document.getElementById("player2").value;
+    
+            if (player1 && player2 && player1 !== player2) {
+                let actionUrl = `/compare/${player1}/${player2}`;  // Correct URL format
+                window.location.href = actionUrl;  // Redirect to correct comparison URL
+            } else {
+                alert("Please select two different players for comparison.");
+            }
+        });
+    </script>    
+</body>
+</html>
